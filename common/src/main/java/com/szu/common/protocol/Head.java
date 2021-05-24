@@ -16,19 +16,12 @@ import java.util.Random;
 
 public class Head implements Serializable {
 
-    static Random random;
-
-    static {
-        random = new Random();
-    }
-
     CodeEnum code;
     long id;
     int  dataLength;
 
     public Head(CodeEnum code, int dataLength) {
         this.code = code;
-        this.id = random.nextLong();
         this.dataLength = dataLength;
     }
 
@@ -36,9 +29,6 @@ public class Head implements Serializable {
         return code;
     }
 
-    public void setCode(CodeEnum code) {
-        this.code = code;
-    }
 
     public long getId() {
         return id;
@@ -50,10 +40,6 @@ public class Head implements Serializable {
 
     public int getDataLength() {
         return dataLength;
-    }
-
-    public void setDataLength(int dataLength) {
-        this.dataLength = dataLength;
     }
 
 }

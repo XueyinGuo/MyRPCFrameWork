@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 public class Content implements Serializable {
 
-    String className;
+    Class<?>  clazz;
     String methodName;
     Class<?>[] paramTypes;
     Object[] args;
@@ -20,19 +20,19 @@ public class Content implements Serializable {
         this.result = result;
     }
 
-    public Content(String className, String methodName, Class<?>[] paramTypes, Object[] args) {
-        this.className = className;
+    public Content(Class clazz, String methodName, Class<?>[] paramTypes, Object[] args) {
+        this.clazz = clazz;
         this.methodName = methodName;
         this.paramTypes = paramTypes;
         this.args = args;
     }
 
-    public String getClassName() {
-        return className;
+    public Class<?> getClazz() {
+        return clazz;
     }
 
-    public void setClassName(String className) {
-        this.className = className;
+    public void setClassName(Class<?>  clazz) {
+        this.clazz = clazz;
     }
 
     public String getMethodName() {

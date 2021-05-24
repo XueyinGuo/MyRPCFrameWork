@@ -13,6 +13,15 @@ import java.net.InetSocketAddress;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
+/*
+* 连接工厂
+*
+* ConcurrentHashMap 中存放着 对应 IP:port 的连接池
+* K : P:port  ----->>>  V : 对这个地址的连接池
+* 每个连接池可以对一个 地址 有多连接
+*
+* 而且通过简单的随机数，勉强做到了连接的负载均衡
+* */
 public class ClientFactory {
 
     static ClientFactory clientFactory;
@@ -30,13 +39,17 @@ public class ClientFactory {
     }
 
     public static void transport(ByteBuf message, InetSocketAddress address) {
-
-
+        /*
+        * 从连接工厂得到一个连接之后，直接通过这个连接 发送请求出去
+        * */
         NioSocketChannel channel = clientFactory.getClient(address);
         channel.writeAndFlush(message);
-
     }
 
+    /*
+    * 获取对应地址的 连接池
+    * 并在连接池中取得一条连接
+    * */
     public NioSocketChannel getClient(InetSocketAddress address) {
         ConnectionPool pool = postman.get(address);
         if (pool == null){
@@ -46,6 +59,7 @@ public class ClientFactory {
         // TODO 负载均衡
         NioSocketChannel socketChannel = pool.getSocketChannelPool()[random.nextInt(poolSize)];
         if (socketChannel == null || !socketChannel.isActive()){
+            /* 如果连接为空，则创建连接 */
             socketChannel = ConnectionPool.createConnection(address);
         }
         return socketChannel;

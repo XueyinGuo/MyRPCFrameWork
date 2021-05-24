@@ -6,6 +6,9 @@ package com.szu.client.callback;
  * @Date 2021/5/24 11:24
  */
 
+/*
+* 接收到服务端回应之后的 回调函数
+* */
 public class CallBackAfterGetResponse implements Runnable {
     long id;
     public CallBackAfterGetResponse(long id) {

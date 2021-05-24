@@ -18,9 +18,18 @@ import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
 import java.util.List;
 
+/*
+* 解码器
+* 客户端和服务器都需要有的一个 handler
+*
+* 而且都必须是在 pipeline 中的第一个 handler
+* */
 public class DecodeHandler extends ByteToMessageDecoder {
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf inBuf, List<Object> out) throws Exception {
+        /*
+        * TODO headSize 暂时是写死的
+        * */
         while (inBuf.readableBytes() >= Config.HEAD_SIZE){
             byte[] headBytes = new byte[Config.HEAD_SIZE];
             inBuf.getBytes(inBuf.readerIndex(), headBytes);

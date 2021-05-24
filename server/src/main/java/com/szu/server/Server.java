@@ -22,12 +22,19 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import java.net.InetSocketAddress;
 
 public class Server {
-
+    /*
+     * 启动服务端
+     * */
     public static void main(String[] args) throws InterruptedException {
+        /* 现在调用分发器中注册 timeService接口 是由 哪一个 具体实现类提供服务 */
         TimeService timeService = new TimeImpl();
         Dispatcher dispatcher = Dispatcher.getDispatcher();
-        dispatcher.register(timeService.getClass(), timeService);
-
+        dispatcher.register(TimeService.class, timeService);
+        /*
+        * 启动服务器监听
+        *
+        * 并在注册需要添加在 NioSocketChannel 中的两个 handler
+        * */
         NioEventLoopGroup boss = new NioEventLoopGroup(20);
         NioEventLoopGroup worker = boss;
         ServerBootstrap serverBootstrap = new ServerBootstrap();
@@ -37,10 +44,12 @@ public class Server {
                     @Override
                     protected void initChannel(NioSocketChannel ch) throws Exception {
                         ChannelPipeline pipeline = ch.pipeline();
-                        pipeline.addLast(new DecodeHandler());
-                        pipeline.addLast(new ServerRequestHandler(dispatcher));
+                        pipeline.addLast(new DecodeHandler()); /* 负责解码客户端发送的数据 */
+                        /* 负责处理上一个 handler 解码的请求 */
+                        pipeline.addLast(new ServerRequestHandler());
                     }
                 }).bind(new InetSocketAddress("localhost", 8090));
+        /* 等待绑定成功之后，继续等待服务器关闭 */
         bind.sync().channel().closeFuture().sync();
     }
 }

@@ -19,10 +19,15 @@ public class CallBackMapping {
         callBackMap = new ConcurrentHashMap<>();
     }
 
-    public static void runCallBack(SZUMessage response){
+    /*
+    * 给 CompletableFuture 中的 result赋值
+    * 并触发回调函数
+    * */
+    public static void fireGetResponse(SZUMessage response){
         long id = response.getHead().getId();
         CompletableFuture future = callBackMap.get(id);
         future.complete(response.getContent().getResult());
+        future.thenRun(new CallBackAfterGetResponse(id)); /* 执行回调 */
         removeCallBack(id);
     }
 

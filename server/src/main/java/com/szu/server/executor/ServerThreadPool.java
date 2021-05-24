@@ -12,7 +12,10 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class ServerThreadPool {
-
+    /*
+    * 自定义线程池
+    * 并且使用自定义的线程工厂
+    * */
     public static int coreSize;
     public static int maxSize;
     public static int freeTime;
@@ -26,8 +29,8 @@ public class ServerThreadPool {
         timeUnit = TimeUnit.MINUTES;
         threadPoolExecutor = new ThreadPoolExecutor(coreSize, maxSize, freeTime, timeUnit,
                 new LinkedBlockingQueue<>(),
-                ServerThreadFactory.getServerThreadFactory(),
-                new ServerRejectPolicy());
+                ServerThreadFactory.getServerThreadFactory(), /* 自定义线程池 */
+                new ServerRejectPolicy());                  /* 自定义拒绝策略 */
 
     }
 

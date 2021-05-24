@@ -15,7 +15,11 @@ public class ClientCallBackHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        /*
+        * 解码之后的 msg 已经被解码器封装成了 SZUMessage 对象
+        * */
         SZUMessage response = (SZUMessage) msg;
-        CallBackMapping.runCallBack(response);
+        /* 从 callBackMap 中找到对应 ID 的 CompletableFuture，并把结果 response 中的结果给到 CompletableFuture  */
+        CallBackMapping.fireGetResponse(response);
     }
 }

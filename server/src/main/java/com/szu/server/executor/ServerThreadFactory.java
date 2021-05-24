@@ -1,4 +1,5 @@
-package com.szu.server.executor;/*
+package com.szu.server.executor;
+/*
  * @Author 郭学胤
  * @University 深圳大学
  * @Description
@@ -9,7 +10,9 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ServerThreadFactory implements ThreadFactory {
-
+    /*
+    * 自定义线程工厂
+    * */
     private static final AtomicInteger poolNumber = new AtomicInteger(1);
     private final ThreadGroup group;
     private final AtomicInteger threadNumber = new AtomicInteger(1);
@@ -25,9 +28,9 @@ public class ServerThreadFactory implements ThreadFactory {
         SecurityManager s = System.getSecurityManager();
         group = (s != null) ? s.getThreadGroup() :
                 Thread.currentThread().getThreadGroup();
-        namePrefix = "server-" +
+        namePrefix = "time-server-pool " +
                 poolNumber.getAndIncrement() +
-                "-service-thread-";
+                "-service-thread ";
     }
 
     @Override

@@ -32,7 +32,7 @@ public class Serialize {
                 e.printStackTrace();
             }
         }
-        System.out.println(byteBody.length);
+//        System.out.println(byteBody.length);
         return byteBody;
     }
 

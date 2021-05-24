@@ -15,9 +15,11 @@ public class CreateProxy {
 
     static Dispatcher dispatcher = Dispatcher.getDispatcher();
 
+    /*
+    * 创建动态代理
+    * */
     public static <T> T getProxy(Class<T> clazz, InetSocketAddress address) {
         ClassLoader loader = clazz.getClassLoader();
-        Object localObject = dispatcher.getInvokeObject(clazz);
         ObjectInvocationHandler handler = new ObjectInvocationHandler(clazz, address);
         return (T)Proxy.newProxyInstance(loader, new Class[]{clazz}, handler);
     }
