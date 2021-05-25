@@ -1,4 +1,5 @@
-package com.szu.common.handler;/*
+package com.szu.common.handler;
+/*
  * @Author 郭学胤
  * @University 深圳大学
  * @Description
@@ -32,12 +33,17 @@ public class DecodeHandler extends ByteToMessageDecoder {
         * */
         while (inBuf.readableBytes() >= Config.HEAD_SIZE){
             byte[] headBytes = new byte[Config.HEAD_SIZE];
+            /* getBytes 不会移动指针 */
             inBuf.getBytes(inBuf.readerIndex(), headBytes);
             ByteArrayInputStream headByteArrInStream = new ByteArrayInputStream(headBytes);
             ObjectInputStream headObjectInputStream = new ObjectInputStream(headByteArrInStream);
             Head head = (Head) headObjectInputStream.readObject();
             if (inBuf.readableBytes() >= head.getDataLength()){
-
+                /* 如果后边的数据包大小也够一个 body，才移动指针 */
+                /*
+                * ByteToMessageDecoder 中有 帮我们拼接 剩余这部分没用的字节数组 到下次接收额字节数组中
+                * 虽然 TCP 会截断数据包，但是两次传输 肯定会保证 被截断的数据包的完整性
+                * */
                 inBuf.readBytes(Config.HEAD_SIZE); // 移动指针到 body 开始的位置
                 byte[] contentBytes = new byte[head.getDataLength()];
                 inBuf.readBytes(contentBytes);
